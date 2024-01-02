@@ -1,0 +1,36 @@
+---
+title: "Untitled"
+author: "Dongyoung Kim"
+date: "2023-12-29"
+output: html_document
+---
+```{r}
+# Ask for the user's name
+name <- readline(prompt="Give me your name: ")
+
+# Print the user's name
+print(paste("Your name is", name))
+
+```
+
+```{r}
+a = NA
+b = ""
+c = NULL
+str(a)
+str(b)
+str(c)
+c(class(a), class(b), class(c))
+```
+
+```{r}
+a = c(1, 2, 3)
+b = c(4, 5, 6)
+cbind(a, b)
+rbind(a, b)
+paste0(a, b)
+as.numeric(paste0(a, b))
+a+b
+c(a, b)
+```
+

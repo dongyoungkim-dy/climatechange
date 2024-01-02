@@ -1,0 +1,111 @@
+---
+title: "climate_change"
+author: "Dongyoung Kim"
+date: "2024-01-02"
+output:
+  pdf_document:
+    toc: true
+    toc_depth: 3
+    number_sections: true
+    latex_engine: xelatex
+header-includes:
+  - \usepackage{pdflscape}
+  - \usepackage{fvextra}
+  - \DefineVerbatimEnvironment{Highlighting}{Verbatim}{breaklines,commandchars=\\\{\}}
+---
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo=FALSE, error=FALSE, warning=FALSE, message=FALSE)
+```
+
+# Possible Variables to Extract
+```{r}
+library(knitr)
+names <- c("user_name", "dates", "time", "word_count", "bytes", "chpater", "tag", "comments", "actual_text")
+df <- data.frame(Names = names)
+kable(df)
+```
+
+# Parsing Ideas
+## User name
+### Corresponding HTML codes
+
+```html
+<a href="/wiki/User:Clayoquot" class="mw-userlink" title="User:Clayoquot" data-mw-revid="1190970117"><bdi>Clayoquot</bdi></a>
+```
+### Idea 
+ - Find "User:" and extract the user name
+ - Find <bdi></bdi> 
+
+## Dates and Time
+### Corresponding HTML codes
+```html
+<span class="mw-changeslist-time">10:40</span>
+<a href="/w/index.php?title=Climate_change&amp;oldid=1190008379" class="mw-changeslist-date" title="Climate change">10:40, 15 December 2023</a>
+```
+### Idea 
+ - Find "mw-changeslist-time" and extract the time
+ - Find <bdi></bdi> "class="mw-changeslist-date" title="Climate change">
+ 
+### Python Code
+```python
+from bs4 import BeautifulSoup
+
+# Your HTML content
+html_content = '''
+<span class="mw-changeslist-time">10:40</span>
+<a href="/w/index.php?title=Climate_change&amp;oldid=1190008379" class="mw-changeslist-date" title="Climate change">10:40, 15 December 2023</a>
+'''
+
+# Parse the HTML content
+soup = BeautifulSoup(html_content, 'lxml')
+
+# Extract time using the 'mw-changeslist-time' class
+time = soup.find(class_="mw-changeslist-time").text
+
+# Extract date using the 'mw-changeslist-date' class
+date = soup.find(class_="mw-changeslist-date").text
+
+print(f"Time: {time}")
+print(f"Date: {date}")
+
+```
+
+## Word count and Bytes
+### Corresponding HTML codes
+
+```html
+<span class="history-size mw-diff-bytes" data-mw-bytes="297168">297,168 bytes</span>
+<span dir="ltr" class="mw-plusminus-neg mw-diff-bytes" title="299,444 bytes after change of this size">−81</span>
+```
+
+### Idea 
+ - Find "data-mw-bytes" and extract the bytes
+ - Find class="mw-plusminus-neg mw-diff-bytes" and extract bytes and word count
+ 
+## Chapter
+### Corresponding HTML codes
+
+```html
+<a href="/wiki/Climate_change#Modelling" title="Climate change">→‎Modelling</a>
+<span class="autocomment"><a href="/wiki/Climate_change#Modelling" title="Climate change">→‎Modelling</a>: </span>
+```
+### Idea 
+
+## Tags
+### Corresponding HTML codes
+
+```html
+<a href="/wiki/Wikipedia:VisualEditor" title="Wikipedia:VisualEditor">Visual edit</a>
+```
+### Idea 
+
+## Comments
+### Corresponding HTML codes
+
+```html
+<span dir="auto"><span class="autocomment"><a href="/wiki/Climate_change#Modelling" title="Climate change">→‎Modelling</a>: </span> added wikilinks to GST, although I am struggeling to figure out what exactly should be in the GST article (as to not overlap with all the other articles)</span>
+```
+### Idea 
+
+## Actual Text
+### Corresponding HTML codes
